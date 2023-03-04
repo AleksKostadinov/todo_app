@@ -1,0 +1,15 @@
+<h5>Hello, {{ request.user|title }}</h5>
+{% if tasks %}
+<h6 style="margin:0">You have <i>{{ count }}</i> incomplete task{{ count|pluralize:"s" }}.</h6>
+{% else %}
+<h6 style="margin:0">You have no pending tasks.</h6>
+{% endif %}
+<div class="mt-2 pt-2 border-top">
+	{% if request.user.is_authenticated %}
+		<button type="button" class="btn btn-primary btn-sm">Logout</button>
+	{% else %}
+		<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Login</button>
+	{% endif %}
+</div>
+
+

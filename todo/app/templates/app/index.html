@@ -2,25 +2,25 @@
 
 {% block content %}
 
-	<div class="container-fluid" id="wrapper">
-		<div class="row justify-content-center">
-			<div class="col-lg-4 col-lg-offset-4" id="content">
-				<h2>Tasks</h2>
+	<div class="row justify-content-center">
+		<div class="col-lg-4 col-lg-offset-4" id="content">
+			<h2>Tasks</h2>
 
-				<form action="#" method="POST" role="form">
-
-					<div class="form-group">
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Enter todo"
-							       aria-label="Todo" aria-describedby="add-btn"
-							       autofocus>
-							<span class="input-group-btn">
-								  <button type="submit" class="btn btn-default" id="add-btn">ADD</button>
-							  </span>
-						</div>
+			{# Add task form section #}
+			<form action="{% url 'create' %}" method="POST" role="form">
+				{% csrf_token %}
+				<div class="form-group">
+					<div class="input-group">
+						{{ form.title }}
+						<span class="input-group-btn">
+                            <button type="submit" class="btn btn-default" id="add-btn">ADD</button>
+                        </span>
 					</div>
-				</form>
+				</div>
+			</form>
 
+			{# Delete task section #}
+			{% if tasks %}
 				<div class="row t10">
 					<div class="col-lg-12">
 						<div class="btn-toolbar">
@@ -32,26 +32,21 @@
 						</div>
 					</div>
 				</div>
+			{% endif %}
 
-				<ul class="list-group t20">
-					{% for task in tasks %}
+			{# List of tasks section #}
+			<ul class="list-group t20">
+				{% for task in tasks %}
+					<a style="text-decoration:none" href="{% url 'detail' task.id %}">
 						{% if task.complete %}
 							<li class="list-group-item todo-completed">{{ task }}</li>
 						{% else %}
-							<li class="list-group-item">{{ task }}</li>
+							<li class="list-group-item todo-uncompleted">{{ task }}</li>
 						{% endif %}
-					{% endfor %}
-				</ul>
-			</div>
+					</a>
+				{% endfor %}
+			</ul>
 		</div>
-
-		<footer>
-			<div class="row pad">
-				<div class="col-lg-12 text-center">
-					Copyright &copy; 2023
-				</div>
-			</div>
-		</footer>
 	</div>
 
 {% endblock content %}
