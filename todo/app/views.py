@@ -1,5 +1,6 @@
+from django.contrib.messages import success
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from app.forms import TaskForm
 from app.models import Task
@@ -38,15 +39,23 @@ class TaskCreate(CreateView):
     # specifies the URL to redirect to after a successful form submission. In this case, it redirects to the index URL
     success_url = reverse_lazy('index')
 
-    # is a method that gets called when the form is valid. It sets the user field of the Task instance to the current user before saving it to the database.
+    # is a method that gets called when the form is valid.
+    # It sets the user field of the Task instance to the current user before saving it to the database.
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(TaskCreate, self).form_valid(form)
 
-    # is a method that gets called when the form is submitted via POST. It gets the form, checks if it's valid, and either calls form_valid or form_invalid depending on the result
+    # is a method that gets called when the form is submitted via POST.
+    # It gets the form, checks if it's valid, and either calls form_valid or form_invalid depending on the result
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+class TaskUpdate(UpdateView):
+    model = Task
+    fields = '__all__'
+    success_url = reverse_lazy('index')
