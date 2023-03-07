@@ -5,11 +5,16 @@
 		<div class="col-lg-4 col-lg-offset-4" id="content">
 			<h2 style="text-align: left"><b>Task: </b>{{ task }}</h2>
 			<div class="list-group t20">
-				<p class="list-group-item">{{ task.description }}</p>
+				{% if task.description %}
+					<p class="list-group-item">{{ task.description }}</p>
+				{% else %}
+					<p class="list-group-item">{{ description }}</p>
+				{% endif %}
 			</div>
 			<div style="display: flex; justify-content: space-between; align-items: center;">
-				<a href="{% url 'index' %}" title="" class="btn btn-dark">Return</a>
+				<a href="{% url 'index' %}" title="" class="btn btn-dark">Go back</a>
 				<a href="{% url 'update' task.id %}" title="" class="btn btn-dark">Edit</a>
+				<a href="{% url 'delete' task.id %}" title="" class="btn btn-warning">Delete</a>
 			</div>
 		</div>
 	</div>

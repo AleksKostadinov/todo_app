@@ -1,0 +1,20 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+	<div class="row justify-content-center">
+		<div class="col-lg-4 col-lg-offset-4" id="content">
+			<h2 style="text-align: left"><b>Task: </b>{{ tasks.title }}</h2>
+			<div class="list-group t20 text-center">
+				<p class="list-group-item" style="color: red"><b>Are you sure you want to delete this task?</b></p>
+			</div>
+			<div style="display: flex; justify-content: space-between; align-items: center;">
+				<a href="{% url 'detail' tasks.id %}" title="" class="btn btn-dark">Go back</a>
+				<form method="POST">
+					{% csrf_token %}
+					<input type="submit" value="Delete" class="btn btn-warning"/>
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

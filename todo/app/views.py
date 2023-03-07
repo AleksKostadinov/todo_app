@@ -1,6 +1,6 @@
-from django.contrib.messages import success
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 
 from app.forms import TaskForm
 from app.models import Task
@@ -27,6 +27,13 @@ class TaskDetail(DetailView):
     model = Task
     template_name = 'app/detail.html'
     context_object_name = 'task'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        task = context['task']
+        if not task.description:
+            context['description'] = 'No description'
+        return context
 
 
 class TaskCreate(CreateView):
@@ -57,5 +64,29 @@ class TaskCreate(CreateView):
 
 class TaskUpdate(UpdateView):
     model = Task
-    fields = '__all__'
+    fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('index')
+
+
+class TaskDelete(DeleteView):
+    model = Task
+    context_object_name = 'tasks'
+    template_name = 'app/delete.html'
+    success_url = reverse_lazy('index')
+
+    def get_queryset(self):
+        owner = self.request.user
+        return self.model.objects.filter(user=owner)
+
+
+class TaskDeleteCompleted(View):
+    @staticmethod
+    def post(request, *args, **kwargs):
+        # Get all completed tasks
+        completed_tasks = Task.objects.filter(complete=True)
+        # Delete completed tasks
+        completed_tasks.delete()
+        # Redirect to the task list page
+        return redirect('index')
+
+
