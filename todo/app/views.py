@@ -58,8 +58,8 @@ class TaskCreate(CreateView):
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+
+        return self.form_invalid(form)
 
 
 class TaskUpdate(UpdateView):

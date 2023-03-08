@@ -6,7 +6,7 @@
 			<h2 style="text-align: left"><b>Task: </b>{{ task }}</h2>
 			<div class="list-group t20">
 				{% if task.description %}
-					<p class="list-group-item">{{ task.description }}</p>
+					<textarea class="list-group-item">{{ task.description }}</textarea>
 				{% else %}
 					<p class="list-group-item">{{ description }}</p>
 				{% endif %}
