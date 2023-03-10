@@ -29,7 +29,7 @@
 			{# List of tasks section #}
 			<ul class="list-group t20">
 				{% for task in tasks %}
-					<a style="text-decoration:none" href="{% url 'detail' task.id %}">
+					<a href="{% url 'detail' task.id %}">
 						{% if task.complete %}
 							<li class="list-group-item todo-completed">{{ task }}</li>
 						{% else %}

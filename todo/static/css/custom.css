@@ -44,6 +44,7 @@ footer {
 /* hover effect */
 a {
     color: #ffc107;
+    text-decoration: none;
 }
 
 .todo-uncompleted {
