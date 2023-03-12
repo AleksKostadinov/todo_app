@@ -58,7 +58,7 @@ a {
 }
 
 input[type=text],
-    /*input[type=password],*/
+input[type=password],
 textarea {
     border: 1px solid #757575;
     border-radius: 5px;
@@ -113,4 +113,23 @@ label {
 
 input.form-control{
     box-shadow:  2px 2px 5px 1px rgba(0, 0, 0, 0.8);
+}
+
+.edit input[type=text]{
+    width: 100%;
+}
+
+.btn.btn-secondary.btn-sm.login, .btn.btn-secondary.btn-sm.logout {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+div .login-form {
+    margin-top: 10%;
+    justify-content: center;
+    display: grid;
+}
+
+h6 span {
+    color: #ffc107;
 }

@@ -1,6 +1,7 @@
 {% extends 'app/base.html' %}
-{% block content %}
 
+{% block content %}
+	{% include 'app/navbar.html' %}
 	<div class="row justify-content-center">
 		<div class="col-lg-4 col-lg-offset-4" id="content">
 			<h2 style="text-align: left"><b>Task: </b>{{ task }}</h2>

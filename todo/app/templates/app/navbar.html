@@ -1,4 +1,4 @@
-<h6>Hello, <span style='color:dodgerblue'>{{ request.user|title }}</span></h6>
+<h6>Hello, <span>{{ request.user|title }}</span></h6>
 
 {% if tasks %}
 	<h5 style="margin:0">
@@ -15,9 +15,9 @@
 
 <div class="mt-2 pt-2 border-top">
 	{% if request.user.is_authenticated %}
-		<button type="button" class="btn btn-primary btn-sm">Logout</button>
+		<a href="{% url 'logout' %}" class="btn btn-secondary btn-sm logout">Logout</a>
 	{% else %}
-		<button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Login</button>
+        <a href="{% url 'login' %}" class="btn btn-secondary btn-sm login" data-bs-dismiss="toast">Login</a>
 	{% endif %}
 </div>
 

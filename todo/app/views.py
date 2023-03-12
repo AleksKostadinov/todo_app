@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
@@ -6,7 +8,20 @@ from app.forms import TaskForm
 from app.models import Task
 
 
-class TaskList(ListView):
+class TaskLoginView(LoginView):
+    template_name = 'app/login.html'
+    fields = '__all__'
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy('index')
+
+
+# class TaskLogoutView(LogoutView):
+#     next_page = 'login'
+
+
+class TaskList(LoginRequiredMixin, ListView):
     model = Task
     template_name = 'app/index.html'
     context_object_name = 'tasks'
@@ -23,7 +38,7 @@ class TaskList(ListView):
         return context
 
 
-class TaskDetail(DetailView):
+class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'app/detail.html'
     context_object_name = 'task'
@@ -36,7 +51,7 @@ class TaskDetail(DetailView):
         return context
 
 
-class TaskCreate(CreateView):
+class TaskCreate(LoginRequiredMixin, CreateView):
     # specifies the model to use for creating new tasks
     model = Task
     # specifies the fields to include in the form for creating new tasks. In this case, it only includes the title field
@@ -62,13 +77,13 @@ class TaskCreate(CreateView):
         return self.form_invalid(form)
 
 
-class TaskUpdate(UpdateView):
+class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('index')
 
 
-class TaskDelete(DeleteView):
+class TaskDelete(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'tasks'
     template_name = 'app/delete.html'
@@ -79,7 +94,7 @@ class TaskDelete(DeleteView):
         return self.model.objects.filter(user=owner)
 
 
-class TaskDeleteCompleted(View):
+class TaskDeleteCompleted(LoginRequiredMixin, View):
     @staticmethod
     def post(request, *args, **kwargs):
         # Get all completed tasks
@@ -88,5 +103,3 @@ class TaskDeleteCompleted(View):
         completed_tasks.delete()
         # Redirect to the task list page
         return redirect('index')
-
-
