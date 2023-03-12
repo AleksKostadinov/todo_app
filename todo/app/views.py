@@ -126,7 +126,7 @@ class TaskDeleteCompleted(LoginRequiredMixin, View):
     @staticmethod
     def post(request, *args, **kwargs):
         # Get all completed tasks
-        completed_tasks = Task.objects.filter(complete=True)
+        completed_tasks = Task.objects.filter(user=request.user, complete=True)
         # Delete completed tasks
         completed_tasks.delete()
         # Redirect to the task list page
