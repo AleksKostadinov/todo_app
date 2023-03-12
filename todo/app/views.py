@@ -12,7 +12,6 @@ from app.models import Task
 
 class TaskLoginView(LoginView):
     template_name = 'app/login.html'
-    fields = '__all__'
     redirect_authenticated_user = True
 
     def get_success_url(self):
@@ -36,14 +35,16 @@ class RegisterView(FormView):
         user = form.save()
         if user is not None:
             login(self.request, user)
-        return super(RegisterView, self).form_valid(form)
+        # return super(RegisterView, self).form_valid(form)
+        return super().form_valid(form)
 
     # is called when the view is accessed with an HTTP GET request.
     # If the user is already authenticated, he will be redirected to the 'success_url':
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             return redirect('index')
-        return super(RegisterView, self).get(*args, **kwargs)
+        # return super(RegisterView, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
     # the get() method in this code is used for checking authentication and rendering the registration form,
     # while the form_valid() method is used for handling the form submission and saving the new user object
@@ -54,11 +55,14 @@ class TaskList(LoginRequiredMixin, ListView):
     template_name = 'app/index.html'
     context_object_name = 'tasks'
 
+    def get_queryset(self):
+        # Filter tasks by current user
+        return Task.objects.filter(user=self.request.user)
+
     # Use context in navbar.html to show tasks to logged user and their counts
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tasks'] = context['tasks'].filter(user=self.request.user)
-        context['count'] = context['tasks'].filter(complete=False).count()
+        context['count'] = context['tasks'].filter(user=self.request.user,complete=False).count()
 
         # Add form to context
         context['form'] = TaskForm()
@@ -70,6 +74,9 @@ class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     template_name = 'app/detail.html'
     context_object_name = 'task'
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -93,7 +100,7 @@ class TaskCreate(LoginRequiredMixin, CreateView):
     # It sets the user field of the Task instance to the current user before saving it to the database.
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super(TaskCreate, self).form_valid(form)
+        return super().form_valid(form)
 
     # is a method that gets called when the form is submitted via POST.
     # It gets the form, checks if it's valid, and either calls form_valid or form_invalid depending on the result
@@ -110,6 +117,9 @@ class TaskUpdate(LoginRequiredMixin, UpdateView):
     fields = ['title', 'description', 'complete']
     success_url = reverse_lazy('index')
 
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user)
+
 
 class TaskDelete(LoginRequiredMixin, DeleteView):
     model = Task
@@ -118,14 +128,18 @@ class TaskDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('index')
 
     def get_queryset(self):
-        owner = self.request.user
-        return self.model.objects.filter(user=owner)
+        return Task.objects.filter(user=self.request.user)
+
+    # def get_queryset(self):
+    #     owner = self.request.user
+    #     return self.model.objects.filter(user=owner)
 
 
 class TaskDeleteCompleted(LoginRequiredMixin, View):
+
     @staticmethod
     def post(request, *args, **kwargs):
-        # Get all completed tasks
+        # Get all completed tasks for the user who owns them
         completed_tasks = Task.objects.filter(user=request.user, complete=True)
         # Delete completed tasks
         completed_tasks.delete()
