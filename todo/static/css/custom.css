@@ -128,8 +128,26 @@ div .login-form {
     margin-top: 10%;
     justify-content: center;
     display: grid;
+    color: whitesmoke;
+}
+div > p {
+    /*justify-content: center;*/
+    /*display: block;*/
+    /*margin: auto;*/
+    text-align: center;
+    color: whitesmoke;
 }
 
 h6 span {
     color: #ffc107;
+}
+h5 {
+    color: whitesmoke;
+}
+h5 span {
+    color: red;
+}
+
+.greeting {
+    color: whitesmoke;
 }

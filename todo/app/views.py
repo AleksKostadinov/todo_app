@@ -1,8 +1,10 @@
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View, FormView
 
 from app.forms import TaskForm
 from app.models import Task
@@ -19,6 +21,32 @@ class TaskLoginView(LoginView):
 
 # class TaskLogoutView(LogoutView):
 #     next_page = 'login'
+
+class RegisterView(FormView):
+    template_name = 'app/register.html'
+    # A form that creates a user:
+    form_class = UserCreationForm
+    # boolean flag that indicates whether or not authenticated users should be redirected to the 'success_url':
+    redirect_authenticated_user = True
+    success_url = reverse_lazy('index')
+
+    # is called when the form is successfully submitted and validated.
+    # It saves the user object and logs them in using Django's built-in login() function:
+    def form_valid(self, form):
+        user = form.save()
+        if user is not None:
+            login(self.request, user)
+        return super(RegisterView, self).form_valid(form)
+
+    # is called when the view is accessed with an HTTP GET request.
+    # If the user is already authenticated, he will be redirected to the 'success_url':
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('index')
+        return super(RegisterView, self).get(*args, **kwargs)
+
+    # the get() method in this code is used for checking authentication and rendering the registration form,
+    # while the form_valid() method is used for handling the form submission and saving the new user object
 
 
 class TaskList(LoginRequiredMixin, ListView):
