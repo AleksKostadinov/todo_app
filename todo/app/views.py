@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View, FormView
-
+from django import forms
 from app.forms import TaskForm
 from app.models import Task
 
@@ -18,13 +18,55 @@ class TaskLoginView(LoginView):
         return reverse_lazy('index')
 
 
-# class TaskLogoutView(LogoutView):
-#     next_page = 'login'
+# custom validation logic to the registration; overridden some validations
+class CustomUserCreationForm(UserCreationForm):
+    # custom error messages
+    error_messages = {
+        'password_mismatch': "The two password fields didn't match.",
+        'username_invalid': "The username must be alphanumeric and at least 5 characters long.",
+        'password_invalid': "The password must be at least 8 characters long and contain both letters and numbers.",
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # None, which will hide the default help text that comes with the fields
+        self.fields['username'].help_text = None
+        self.fields['password1'].help_text = None
+        self.fields['password2'].help_text = None
+
+    # 'clean_username' method is used to validate the username field,
+    # checking that it is alphanumeric and at least 5 characters long
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not username.isalnum() or len(username) < 5:
+            raise forms.ValidationError(
+                self.error_messages['username_invalid'],
+                code='username_invalid',
+            )
+        return username
+
+    # 'clean_password2' method is used to validate the password fields
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(
+                self.error_messages['password_mismatch'],
+                code='password_mismatch',
+            )
+        if len(password1) < 8 or not any(char.isdigit() for char in password1) or not any(
+                char.isalpha() for char in password1):
+            raise forms.ValidationError(
+                self.error_messages['password_invalid'],
+                code='password_invalid',
+            )
+        return password2
+
 
 class RegisterView(FormView):
     template_name = 'app/register.html'
     # A form that creates a user:
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
     # boolean flag that indicates whether or not authenticated users should be redirected to the 'success_url':
     redirect_authenticated_user = True
     success_url = reverse_lazy('index')
@@ -62,7 +104,7 @@ class TaskList(LoginRequiredMixin, ListView):
     # Use context in navbar.html to show tasks to logged user and their counts
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['count'] = context['tasks'].filter(user=self.request.user,complete=False).count()
+        context['count'] = context['tasks'].filter(user=self.request.user, complete=False).count()
 
         # Add form to context
         context['form'] = TaskForm()
