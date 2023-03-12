@@ -59,7 +59,7 @@ a {
 }
 
 .todo-uncompleted:hover {
-    box-shadow: inset 467px 0 0 0 #ffc107;
+    box-shadow: inset 667px 0 0 0 #ffc107;
     color: #fff;
 }
 
@@ -104,7 +104,8 @@ label {
 }
 
 input.form-control {
-    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.8);
+    box-shadow: 2px 3px 6px 1px rgba(0, 0, 0, 0.8);
+
 }
 
 .edit input[type=text] {
@@ -187,4 +188,11 @@ section.navbar-section {
 
 .btn.btn-secondary.btn-sm.logout {
     margin-bottom: 10px;
+}
+
+
+.form-control:focus{
+
+    border-color: #6c757d;
+    box-shadow: 2px 2px 6px 0.1rem rgba(108, 117, 125, 100);
 }
