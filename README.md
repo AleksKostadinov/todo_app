@@ -1,12 +1,12 @@
 Todo Site
 =========
 
-This is a todo site built using Django, HTML, CSS and Bootstrap.   
+Todo site built using Django, HTML, CSS and Bootstrap.  
+I used class based views for the logic. 
 
 ![Alt Text](https://aleks-kostadinov.s3.amazonaws.com/images/todo_page.PNG)
 
 
-I used:
 * PostgreSQL - for storing, maintaining and accessing data
 * Environment variables - for sensitive information
 * WhiteNoise - to serve static files
