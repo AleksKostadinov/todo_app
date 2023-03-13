@@ -3,6 +3,9 @@ Todo Site
 
 This is a todo site built using Django, HTML, CSS and Bootstrap.   
 
+![Alt Text](https://aleks-kostadinov.s3.amazonaws.com/images/todo_page.PNG)
+
+
 I used:
 * PostgreSQL - for storing, maintaining and accessing data
 * Environment variables - for sensitive information
@@ -12,6 +15,10 @@ I used:
 * CSRF_TRUSTED_ORIGINS - A list of trusted origins
   
 The site is active [here](https://todoapp-production-5d77.up.railway.app/), but not permanent due to the use of a Starter Plan in Railway.
+
+<img src="https://aleks-kostadinov.s3.eu-central-1.amazonaws.com/uploads/2023/02/27/register.gif" alt="Todo Site Register" width="500" height="270"> <img src="https://aleks-kostadinov.s3.eu-central-1.amazonaws.com/uploads/2023/02/27/todos.gif" alt="Todo Site Todos" width="500" height="270">
+
+
 
 Table of Contents
 -----------------
