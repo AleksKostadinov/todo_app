@@ -1,4 +1,4 @@
-Todo Site
+Todo Site - see me [here](https://todoapp9999.pythonanywhere.com/) 
 =========
 
 Todo site built using Django, HTML, CSS and Bootstrap.  
@@ -14,7 +14,7 @@ I used class based views for the logic.
 * Procfile and runtime.txt - to tell Railway how to run my app
 * CSRF_TRUSTED_ORIGINS - A list of trusted origins
   
-The site is active [here](https://todoapp-production-5d77.up.railway.app/), but not permanent due to the use of a Starter Plan in Railway.
+The site is active [here](https://todoapp9999.pythonanywhere.com/) at PythonAnywhere. The site is not active at [Railway](https://todoapp-production-5d77.up.railway.app/) at the moment.
 
 ![Todo Site Register](https://aleks-kostadinov.s3.eu-central-1.amazonaws.com/uploads/2023/02/27/register.gif)
 
